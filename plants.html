@@ -1,0 +1,85 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>
+        HydroGrowApp
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="scripts.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&amp;display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-[#d9e6f6] min-h-screen flex flex-col items-center p-6">
+    <header class="w-full max-w-md flex justify-between items-center mb-6">
+        <div class="flex items-center space-x-2 text-[#2c4a6e] text-lg font-semibold">
+            <i class="fas fa-map-marker-alt">
+            </i>
+            <span id="location">
+
+            </span>
+        </div>
+        <div style="display: none;">
+            <span id="humidity"></span>
+            <span id="temperature"></span>
+        </div>
+        <div>
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </div>
+    </header>
+
+
+    <section class="w-full max-w-md bg-white rounded-3xl p-6 mb-6">
+        <h2 class="text-2xl font-semibold text-[#2c4a6e] mb-4">My Plants</h2>
+        <ul id="plantList" class="space-y-4">
+            <!-- Item akan diisi dari JavaScript -->
+        </ul>
+    </section>
+
+    <section class="w-full max-w-md bg-white rounded-3xl p-6 mb-6">
+        <h2 class="text-[#2c4a6e] text-2xl font-semibold mb-4">Add Plant</h2>
+        <form id="plantForm" class="space-y-4">
+            <input type="text" id="plantName" placeholder="Plant Name" required
+                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#4f7db3]" />
+            <input type="date" id="date" required
+                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#4f7db3]" />
+            <input type="text" id="growingMedia" placeholder="Growing Media" required
+                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#4f7db3]" />
+            <button type="submit"
+                class="w-full bg-[#4f7db3] text-white font-semibold py-2 rounded-xl hover:bg-[#3a6496]">
+                Add to Schedule
+            </button>
+        </form>
+    </section>
+
+    <div class="h-24"></div>
+    <nav
+        class="fixed bottom-0 w-full max-w-md bg-white rounded-t-3xl flex justify-around items-center p-4 text-[#2c4a6e] shadow-lg">
+        <a href="index.html" class="nav-link flex flex-col items-center space-y-1 text-lg">
+            <i class="fas fa-home text-2xl"></i>
+            <span>Home</span>
+        </a>
+        <a href="schedule.html" class="nav-link flex flex-col items-center space-y-1 text-lg">
+            <i class="fas fa-calendar-alt text-2xl"></i>
+            <span>Schedule</span>
+        </a>
+        <a href="plants.html" class="nav-link flex flex-col items-center space-y-1 text-lg">
+            <i class="fas fa-leaf text-2xl"></i>
+            <span>Plants</span>
+        </a>
+        <a href="settings.html" class="nav-link flex flex-col items-center space-y-1 text-lg">
+            <i class="fas fa-cog text-2xl"></i>
+            <span>Settings</span>
+        </a>
+    </nav>
+</body>
+
+
+</html>
