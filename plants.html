@@ -7,6 +7,11 @@
         HydroGrowApp
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <script src="scripts.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&amp;display=swap" rel="stylesheet" />
@@ -17,9 +22,9 @@
     </style>
 </head>
 
-<body class="bg-[#d9e6f6] min-h-screen flex flex-col items-center p-6">
-    <header class="w-full max-w-md flex justify-between items-center mb-6">
-        <div class="flex items-center space-x-2 text-[#2c4a6e] text-lg font-semibold">
+<body class="bg-[#d9e6f6] dark:bg-gray-900 min-h-screen flex flex-col items-center p-6 dark:text-white">
+    <header class="w-full max-w-md flex justify-between items-center mb-6 ">
+        <div class="flex items-center space-x-2 text-[#2c4a6e] text-lg font-semibold dark:text-white">
             <i class="fas fa-map-marker-alt">
             </i>
             <span id="location">
@@ -29,21 +34,38 @@
         <div style="display: none;">
             <span id="humidity"></span>
             <span id="temperature"></span>
+            <span id="weather"></span>
+            <span id="wind"></span>
         </div>
         <div>
-            <i class="fa fa-bars" aria-hidden="true"></i>
+            <button id="toggleSidebar">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+            <!-- Overlay (background hitam semi-transparan) -->
+            <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+            <!-- Sidebar kanan -->
+            <div id="sidebar"
+                class="fixed top-0 right-0 h-full w-64 bg-gray-100 p-4 shadow-lg transform translate-x-full transition-transform duration-300 z-40 dark:bg-gray-800 dark:text-white">
+                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">ℹ️ Info Aplikasi</h2>
+                <div class="space-y-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-white">
+                    <p><strong>Nama:</strong> HydroGrow</p>
+                    <p><strong>Versi:</strong> 1.0.0</p>
+                    <p><strong>Dibuat oleh:</strong> Dio Prasetiyo</p>
+                    <p><strong>Deskripsi:</strong> Pantau jadwal penyiraman & info tanaman.</p>
+                </div>
+            </div>
         </div>
     </header>
 
 
-    <section class="w-full max-w-md bg-white rounded-3xl p-6 mb-6">
-        <h2 class="text-2xl font-semibold text-[#2c4a6e] mb-4">My Plants</h2>
-        <ul id="plantList" class="space-y-4">
+    <section class="w-full max-w-md bg-white rounded-3xl p-6 mb-6 dark:bg-gray-800 dark:text-white">
+        <h2 class="text-2xl font-semibold text-[#2c4a6e] mb-4 dark:text-white">My Plants</h2>
+        <ul id="plantList" class="space-y-4 ">
             <!-- Item akan diisi dari JavaScript -->
         </ul>
     </section>
 
-    <section class="w-full max-w-md bg-white rounded-3xl p-6 mb-6">
+    <section class="w-full max-w-md bg-white rounded-3xl p-6 mb-6 dark:bg-gray-800 dark:text-white">
         <h2 class="text-[#2c4a6e] text-2xl font-semibold mb-4">Add Plant</h2>
         <form id="plantForm" class="space-y-4">
             <input type="text" id="plantName" placeholder="Plant Name" required
@@ -58,10 +80,13 @@
             </button>
         </form>
     </section>
-
+    <div style="display: none;">
+        <span class=" text-lg">Theme</span>
+        <button id="toggleDark" class="bg-[#4f7db3] text-white px-4 py-1 rounded-lg">Dark Mode</button>
+    </div>
     <div class="h-24"></div>
     <nav
-        class="fixed bottom-0 w-full max-w-md bg-white rounded-t-3xl flex justify-around items-center p-4 text-[#2c4a6e] shadow-lg">
+        class="fixed bottom-0 w-full max-w-md bg-white rounded-t-3xl flex justify-around items-center p-4 text-[#2c4a6e] shadow-xl border-t border-gray-200 z-50 dark:bg-gray-800 dark:text-white">
         <a href="index.html" class="nav-link flex flex-col items-center space-y-1 text-lg">
             <i class="fas fa-home text-2xl"></i>
             <span>Home</span>

@@ -12,6 +12,98 @@ document.addEventListener('DOMContentLoaded', function () {
   const page = path.substring(path.lastIndexOf('/') + 1); // misalnya: 'schedule.html'
   const plantForms = document.getElementById('plantForm');
   const plantLists = document.getElementById('plantList');
+  const toggleBtn = document.getElementById('toggleSidebar');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const greeting = document.getElementById("greeting");
+  
+
+  function openSidebar() {
+    sidebar.classList.remove('translate-x-full');
+    overlay.classList.remove('hidden');
+  }
+
+  function closeSidebar() {
+    sidebar.classList.add('translate-x-full');
+    overlay.classList.add('hidden');
+  }
+
+  toggleBtn.addEventListener('click', openSidebar);
+  overlay.addEventListener('click', closeSidebar);
+
+const username = document.getElementById("person");
+if (username) {
+  const savedUsername = localStorage.getItem("person");
+  if (savedUsername) {
+    username.value = savedUsername;
+  }
+
+  username.addEventListener("change", () => {
+    localStorage.setItem("person", username.value);
+    console.log("Username disimpan:", username.value);
+  });
+}
+
+const toggleBtnMode = document.getElementById("toggleDark");
+
+// Simpan dan ambil preferensi dark mode
+if(toggleBtnMode){
+  const savedTheme = localStorage.getItem("theme");
+  console.log(localStorage.getItem("theme"));
+  if (savedTheme === "dark") {
+    document.documentElement.classList.add("dark");
+  }
+
+  toggleBtnMode.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+
+    const isDark = document.documentElement.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    console.log(localStorage.getItem("theme"));
+  });
+}
+
+  
+
+
+
+    
+  function getGreeting() {
+  const now = new Date();
+  const hour = now.getHours();
+  const name = localStorage.getItem("person") || "";
+  if (hour >= 5 && hour < 12) {
+    return "Good Mornig 🌤️<br>" +  name;
+  } else if (hour >= 12 && hour < 15) {
+    return "Good Afternoon ☀️<br>"+  name;
+  } else if (hour >= 15 && hour < 18) {
+    return "Good Evening 🌇<br>";
+  } else {
+    return "Goodnight 🌙<br>";
+  }
+}
+
+if (greeting) {
+  // Contoh menampilkan ke elemen HTML
+greeting.innerHTML = getGreeting();
+
+}
+
+const unitSelect = document.getElementById("tempUnitSelect");
+if (unitSelect) {
+  
+  const savedUnit = localStorage.getItem("temperatureUnit") || "metric";
+  unitSelect.value = savedUnit;
+
+  unitSelect.addEventListener("change", () => {
+    const selectedUnit = unitSelect.value;
+    localStorage.setItem("temperatureUnit", selectedUnit);
+    console.log("Unit disimpan:", selectedUnit);
+    // Kamu bisa langsung call API cuaca di sini juga
+    getLocationAndWeather(); 
+  });
+}
+
 
 
     const links = document.querySelectorAll('.nav-link');
@@ -24,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   
   if (plantForms && plantLists){
-    console.log('masuk plants');
     plantForms.addEventListener('submit', function (e) {
       e.preventDefault();
   
@@ -64,7 +155,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   
     function renderPlants(data) {
-      console.log(data)
       plantLists.innerHTML = '';
       data.forEach(item => {
         const li = document.createElement('li');
@@ -77,12 +167,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const formattedDate = `${day}-${month}-${year}`;
 
 
-        li.className = 'p-4 bg-[#d9e6f6] rounded-2xl flex justify-between items-center';
+        li.className = 'p-4 bg-[#d9e6f6] rounded-2xl flex justify-between items-center dark:bg-zinc-900 ';
         li.innerHTML = `
           <div>
-            <p class="text-lg font-semibold text-[#2c4a6e]">${item.plantName}</p>
-            <p class="text-sm text-[#4f7db3]">Tanggal : ${formattedDate}</p>
-            <p class="text-sm text-[#4f7db3]">Media : ${item.growMedia}</p>
+            <p class="text-lg font-semibold text-[#2c4a6e] dark:text-white ">${item.plantName}</p>
+            <p class="text-sm text-[#4f7db3] dark:text-white">Tanggal : ${formattedDate}</p>
+            <p class="text-sm text-[#4f7db3] dark:text-white">Media : ${item.growMedia}</p>
           </div>
           <i class="fas fa-leaf text-[#4f7db3] text-xl"></i>
         `;
@@ -145,12 +235,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const year = dateObj.getFullYear();
         
         const formattedDate = `${day}-${month}-${year}`;
-        li.className = 'p-4 bg-[#d9e6f6] rounded-2xl flex justify-between items-center';
+        li.className = 'dark:bg-zinc-800 dark:text-white p-4 bg-[#d9e6f6] rounded-2xl flex justify-between items-center';
         li.innerHTML = `
           <div>
-            <p class="text-lg font-semibold text-[#2c4a6e]">${item.plant}</p>
-            <p class="text-sm text-[#4f7db3]">Tanggal : ${formattedDate}</p>
-            <p class="text-sm text-[#4f7db3]">Jam : ${item.time}</p>
+            <p class="text-lg font-semibold text-[#2c4a6e]  dark:text-white">${item.plant}</p>
+            <p class="text-sm text-[#4f7db3] dark:text-white">Tanggal : ${formattedDate}</p>
+            <p class="text-sm text-[#4f7db3] dark:text-white">Jam : ${item.time}</p>
           </div>
           <i class="fas fa-leaf text-[#4f7db3] text-xl"></i>
         `;
@@ -161,20 +251,25 @@ document.addEventListener('DOMContentLoaded', function () {
     loadFromSheet();
   }
 
-  if (location && temperature && humidity){
+  if ( temperature && humidity){
     function getWeather(lat, lon) {
-      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
+      const unit = localStorage.getItem("temperatureUnit") || "metric";
+      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${unit}`)
         .then(response => response.json())
         .then(data => {
           const temp = Math.round(data.main.temp);
           const hum = data.main.humidity;
           const loc = data.name;
-          const weath = data.weather.main;
+          const weath = data.weather[0].main;
           const wind = data.wind.speed;
           
   
+          if (unit == "metric") {
+           temperature.innerText = `${temp}°C`; 
+          }else{
+            temperature.innerText = `${temp}°F`;
+          }
           
-          temperature.innerText = `${temp}°`;
           humidity.innerText = `${hum}%`;
           location.innerText = `${loc}`;
           weather.innerText = `${weath}`;
